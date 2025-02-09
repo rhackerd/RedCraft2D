@@ -9,8 +9,8 @@ class Core {
         Core();
         ~Core();
         void init();
-        void run();
-        void shutdown();
+        void event();
+        void draw();
 
         bool shouldCloseWindow() { return graphics.shouldCloseWindow(); }
 
