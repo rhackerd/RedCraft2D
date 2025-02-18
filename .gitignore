@@ -1,0 +1,7 @@
+**.make
+Makefile
+**.o
+**.d
+bin/
+obj/
+*.sh
