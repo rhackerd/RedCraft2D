@@ -1,6 +1,6 @@
 #include "core.h"
 
-Core::Core() : debug_voxels(false), debug_chunks(false), show_fps(false), show_player_pos(false), show_player_rot(false), show_player_chunk(false), show_player_voxel(false) {}
+Core::Core() : debug_voxels(false), debug_chunks(false), show_fps(false), show_player_pos(false), show_player_rot(false), show_player_chunk(false), show_player_voxel(false), scene(0) {}
 
 
 Core::~Core() {
@@ -23,6 +23,19 @@ void Core::event() {
 void Core::draw() {
     graphics.beginDrawing();
     graphics.clearBackground(RAYWHITE);
+
+    switch (scene) {
+        case 0:
+            menu.draw();
+            if (menu.getNext()) {
+                scene += 1;
+            }
+            break;
+        case 1:
+            
+            break;
+    }
+
     graphics.drawFPS(10, 10);
     graphics.endDrawing();
 }

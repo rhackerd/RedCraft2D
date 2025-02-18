@@ -3,6 +3,9 @@
 
 #include <fmt/core.h>
 #include "graphics/engine.h"
+#include "scenes/menu.h"
+#include "scenes/game.h"
+
 
 class Core {
     public:
@@ -11,7 +14,6 @@ class Core {
         void init();
         void event();
         void draw();
-
         bool shouldCloseWindow() { return graphics.shouldCloseWindow(); }
 
     private:
@@ -23,8 +25,11 @@ class Core {
         bool show_player_chunk;
         bool show_player_voxel;
 
+        int scene;
 
         engine graphics;
+        Menu menu;
+        Game game;
 };
 
 
