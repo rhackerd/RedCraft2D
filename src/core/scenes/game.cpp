@@ -9,5 +9,6 @@ Game::~Game() {
 }
 
 void Game::draw() {
-    
+    voxelengine.event();
+    voxelengine.draw();
 }

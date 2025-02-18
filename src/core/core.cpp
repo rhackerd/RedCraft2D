@@ -11,6 +11,7 @@ Core::~Core() {
 
 void Core::init() {
     fmt::print("Initializing Core\n");
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT);
     graphics.init();
     graphics.initWindow(800, 600, "Raylib Game");
     fmt::print("Done initializing Core\n");
@@ -32,6 +33,7 @@ void Core::draw() {
             }
             break;
         case 1:
+            game.draw();
             
             break;
     }
