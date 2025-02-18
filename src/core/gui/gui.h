@@ -3,9 +3,10 @@
 #include <raylib.h>
 
 
-
-bool GUIButton(Rectangle bounds, const char* text, bool enabled);
-
+namespace GUI {
+    bool DrawButton(Rectangle bounds, const char* text, bool enabled);
+    bool DrawInput(Rectangle bounds, char* text, int maxLenght, bool enabled);
+}
 
 
 #endif

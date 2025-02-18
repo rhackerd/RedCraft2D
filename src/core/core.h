@@ -9,7 +9,7 @@
 
 class Core {
     public:
-        Core();
+        Core(bool serverMode);
         ~Core();
         void init();
         void event();
@@ -24,6 +24,8 @@ class Core {
         bool show_player_rot;
         bool show_player_chunk;
         bool show_player_voxel;
+
+        bool serverMode;
 
         int scene;
 

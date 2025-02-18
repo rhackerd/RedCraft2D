@@ -1,24 +1,71 @@
 #include "gui.h"
+#include <string.h>
 
+Color backgroundColor = GRAY;
+Color hoveredColor = DARKGRAY;
+Color disabledColor = DARKGRAY;
+bool border = true;
+Color borderColor = {50, 50, 50, border ? 255 : 0};
+float borderRadius = 0.1f;
+Color textColor = WHITE;
 
-bool GUIButton(Rectangle bounds, const char* text, bool enabled) {
-    if (enabled) {
-        bool hovered = CheckCollisionPointRec(GetMousePosition(), bounds);
-        DrawRectangleRounded(bounds, 0.1f, 0.2f, hovered ? DARKGRAY : GRAY);
+bool GUI::DrawButton(Rectangle bounds, const char* text, bool enabled) {
+    bool isHovered = CheckCollisionPointRec(GetMousePosition(), bounds);
+    Color buttonColor = enabled ? backgroundColor : disabledColor;
+    if (enabled && isHovered) buttonColor = hoveredColor;
+    DrawRectangleRounded(bounds, borderRadius-0.05f, 0.2f, buttonColor);
+    DrawRectangleRoundedLinesEx(bounds, borderRadius, 0.2f, 2.0f, borderColor);
 
-        int textWidth = MeasureText(text, 20);
-        int textHeight = 20;
-        int textX = bounds.x + (bounds.width - textWidth) / 2;
-        int textY = bounds.y + (bounds.height - textHeight) / 2;
+    int textWidth = MeasureText(text, 20);
+    int textHeight = 20;
+    int textX = bounds.x + (bounds.width - textWidth) / 2;
+    int textY = bounds.y + (bounds.height - textHeight) / 2;
 
-        DrawText(text, textX, textY, 20, WHITE);
+    DrawText(text, textX, textY, 20, WHITE);
 
-        if (hovered) {
-            if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
-                return true;
-            }
+    if (isHovered && enabled) {
+        if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+            return true;
         }
     }
 
     return false;
+}
+
+bool GUI::DrawInput(Rectangle bounds, char* text, int maxLength, bool enabled) {
+    static bool active = false; // Zda je input aktivní
+    int textSize = MeasureText(text, 20);
+    float maxsize = (float)(MeasureText("F", 20) * maxLength+(2*5));
+    if(textSize > maxsize) maxsize = textSize + (2 * 5);
+    Rectangle editedBounds = {(float)bounds.x, (float)bounds.y, maxsize, (float)bounds.height}; 
+
+    if (enabled && IsMouseButtonPressed(MOUSE_LEFT_BUTTON) && CheckCollisionPointRec(GetMousePosition(), editedBounds)) {
+        active = true;
+    } else if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        active = false;
+    }
+
+
+    DrawRectangleRounded(editedBounds, 0.0f, 0.2f, active ? disabledColor : enabled ? backgroundColor : disabledColor);
+    DrawRectangleRoundedLinesEx(editedBounds, borderRadius, .2f, 2.0f, borderColor);
+
+    if (active && enabled) {
+        int key = GetCharPressed();
+        while (key > 0) {
+            if (strlen(text) < maxLength) {
+                text[strlen(text)] = (char)key;
+                text[strlen(text) + 1] = '\0';
+            }
+            key = GetCharPressed();
+        }
+
+        if (IsKeyPressed(KEY_BACKSPACE) | IsKeyPressedRepeat(KEY_BACKSPACE) && strlen(text) > 0) {
+            text[strlen(text) - 1] = '\0';
+        }
+    }
+
+    // Vykreslení textu
+    DrawText(text, bounds.x + 5, bounds.y + (bounds.height - 20) / 2, 20, textColor);
+
+    return active;
 }

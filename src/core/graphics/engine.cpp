@@ -1,15 +1,17 @@
 #include "engine.h"
+#include "../utils/logging.hpp"
 
 engine::engine() {}
 
 engine::~engine() {}
 
 void engine::init() {
-    fmt::print("Engine initialized\n");
+    info("Engine initialized");
+    SetTraceLogLevel(LOG_ERROR);
 }
 
 void engine::deinit() {
-    fmt::print("Engine deinitialized\n");
+    info("Engine deinitialized");
 }
 
 void engine::initWindow(int width, int height, const char* title) {

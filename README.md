@@ -10,6 +10,10 @@ RedCraft2D is still in **heavy development**!!
 **Věc** | **✅ / ❌**
 ------- | ------
 multiplayer | ❌
+terrain generation | ❌
+voxel engine | can only spawn blocks (not optimized at all) ✅
+
+
 
 
 

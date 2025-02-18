@@ -2,7 +2,7 @@
 #include "core.h"
 
 int main() {
-    Core game;
+    Core game(false);
     game.init();
     while (!game.shouldCloseWindow()) {
         game.event();

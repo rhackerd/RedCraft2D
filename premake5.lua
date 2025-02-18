@@ -6,7 +6,7 @@ project "app"
     language "C++"
     targetdir "bin/%{cfg.buildcfg}"
     files { "src/app/**.h", "src/app/**.cpp" }
-    links { "core", "raylib", "fmt" }
+    links { "core", "raylib", "fmt", "enet" }
     includedirs { "src/core", "raygui/src" }
 
 

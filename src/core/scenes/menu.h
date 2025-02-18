@@ -11,6 +11,7 @@ class Menu
 {
 private:
     bool next;
+    char text[21];
 
 
 public:
