@@ -5,6 +5,16 @@
 ## Note
 RedCraft2D is still in **heavy development**!!
 
+## TODO
+
+**Věc** | **✅ / ❌**
+------- | ------
+multiplayer | ❌
+
+
+
+
+
 ## How to compile
 1. First, ensure you have **Premake5** and **Make** installed.
 2. Navigate to the root directory of the project.
@@ -28,3 +38,6 @@ Once compiled, you can run the game from the terminal:
     ./app
     ```
 
+## Authors
+
+- [rhackerd](https://github.com/rhackerd)
