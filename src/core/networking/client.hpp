@@ -3,6 +3,10 @@
 
 #include <enet/enet.h>
 
+enum events {
+    join
+};
+
 class Client
 {
 private:
@@ -12,10 +16,17 @@ private:
     ENetEvent event;
     ENetPacket* packet;
 
+    const char* playerName;
+
+
+    
+
 
 public:
     Client();
     ~Client();
+
+    void setPlayerName(const char* playerName);
 
     void init();
 };

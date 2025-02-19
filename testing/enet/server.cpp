@@ -2,6 +2,8 @@
 #include <iostream>
 #include <cstring>
 
+
+
 int main() {
     if (enet_initialize() != 0) {
         std::cerr << "failed to initialize ENet!" << std::endl;
@@ -33,20 +35,18 @@ int main() {
                     std::cout << "A new client connected!" << std::endl;
                     break;
                 case ENET_EVENT_TYPE_RECEIVE:
-                    std::cout << "Received a message: " << (char*)event.packet->data << std::endl;
-                    enet_packet_destroy(event.packet);
-                    packet = enet_packet_create(message, strlen(message) + 1, ENET_PACKET_FLAG_RELIABLE);
-                    
-                    // Send the packet to the client
-                    for (ENetPeer* peer = server->peers; peer < server->peers + server->peerCount; ++peer) {
-                        if (peer->state == ENET_PEER_STATE_CONNECTED) {
-                            // Send the packet to the connected client
-                            enet_peer_send(peer, 0, packet);
-                        }
+                    if (event.packet->dataLength > 1) {
+                        uint8_t eventID = event.packet->data[0];  // Extract event ID
+                        const char* receivedPlayerName = reinterpret_cast<const char*>(event.packet->data + 1); // Extract player name
+
+                        std::cout << "Received Event: " << static_cast<int>(eventID) 
+                                << ", Player Name: " << receivedPlayerName << std::endl;
+                    } else {
+                        std::cerr << "Error: Received packet is too small!" << std::endl;
                     }
-                    
-                    // Force the immediate sending of the packet
-                    enet_host_flush(event.peer->host); // Use the host of the peer to flush
+
+                    // Destroy the packet after processing
+                    enet_packet_destroy(event.packet);
                     break;
                 case ENET_EVENT_TYPE_DISCONNECT:
                     std::cout << "A client disconnected" << std::endl;

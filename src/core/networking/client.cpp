@@ -38,12 +38,18 @@ void Client::init() {
     if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
         info("connected to the server");
 
-        const char* message = "Hello world";
+        uint8_t event_id = events::join;
+        size_t playerNameLength = strlen(playerName) + 1;
+        size_t packetSize = 1 + playerNameLength;
+        char* packetData = new char[packetSize];
+        packetData[0] = static_cast<char>(event_id);
+        memcpy(packetData + 1, playerName, playerNameLength);
 
-
-        packet = enet_packet_create(message, strlen(message) + 1, ENET_PACKET_FLAG_RELIABLE);
+        packet = enet_packet_create(packetData, packetSize, ENET_PACKET_FLAG_RELIABLE);
         enet_peer_send(peer, 0, packet);
         enet_host_flush(client);
+
+        delete[] packetData;
 
     }else {
         error("failed to connect to the server");
@@ -51,4 +57,8 @@ void Client::init() {
         return;
     }
 
+}
+
+void Client::setPlayerName(const char* playerName) {
+    this->playerName = playerName;
 }

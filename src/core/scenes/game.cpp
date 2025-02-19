@@ -13,6 +13,7 @@ void Game::draw() {
     voxelengine.draw();
 }
 
-void Game::init() {
+void Game::init(const char* playerName) {
+    client.setPlayerName(playerName);
     client.init();
 }

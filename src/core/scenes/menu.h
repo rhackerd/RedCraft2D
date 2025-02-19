@@ -12,12 +12,14 @@ class Menu
 private:
     bool next;
     char text[21];
+    Font customFont;
 
 
 public:
     Menu();
     ~Menu();
-    
+
+    const char* getPlayerName();    
     void draw();
     void event();
     void enable();

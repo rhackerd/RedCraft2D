@@ -1,5 +1,6 @@
 #include "engine.h"
 #include "../utils/logging.hpp"
+#include "../gui/gui.h"
 
 engine::engine() {}
 
@@ -7,7 +8,7 @@ engine::~engine() {}
 
 void engine::init() {
     info("Engine initialized");
-    SetTraceLogLevel(LOG_ERROR);
+    SetTraceLogLevel(LOG_INFO);
 }
 
 void engine::deinit() {

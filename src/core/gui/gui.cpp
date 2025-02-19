@@ -9,7 +9,9 @@ Color borderColor = {50, 50, 50, border ? 255 : 0};
 float borderRadius = 0.1f;
 Color textColor = WHITE;
 
-bool GUI::DrawButton(Rectangle bounds, const char* text, bool enabled) {
+
+
+bool GUI::DrawButton(Rectangle bounds, const char* text, bool enabled, Font customFont) {
     bool isHovered = CheckCollisionPointRec(GetMousePosition(), bounds);
     Color buttonColor = enabled ? backgroundColor : disabledColor;
     if (enabled && isHovered) buttonColor = hoveredColor;
@@ -21,7 +23,8 @@ bool GUI::DrawButton(Rectangle bounds, const char* text, bool enabled) {
     int textX = bounds.x + (bounds.width - textWidth) / 2;
     int textY = bounds.y + (bounds.height - textHeight) / 2;
 
-    DrawText(text, textX, textY, 20, WHITE);
+
+    DrawTextEx(customFont, text, {(float)textX, (float)textY}, 20, 1.0f, textColor);
 
     if (isHovered && enabled) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
@@ -32,7 +35,7 @@ bool GUI::DrawButton(Rectangle bounds, const char* text, bool enabled) {
     return false;
 }
 
-bool GUI::DrawInput(Rectangle bounds, char* text, int maxLength, bool enabled) {
+bool GUI::DrawInput(Rectangle bounds, char* text, int maxLength, bool enabled, Font customFont) {
     static bool active = false; // Zda je input aktivní
     int textSize = MeasureText(text, 20);
     float maxsize = (float)(MeasureText("F", 20) * maxLength+(2*5));
@@ -64,8 +67,7 @@ bool GUI::DrawInput(Rectangle bounds, char* text, int maxLength, bool enabled) {
         }
     }
 
-    // Vykreslení textu
-    DrawText(text, bounds.x + 5, bounds.y + (bounds.height - 20) / 2, 20, textColor);
+    DrawTextEx(customFont, text, {bounds.x + 5, bounds.y + (bounds.height - 20) / 2}, 20, 1.0f, textColor);
 
     return active;
 }

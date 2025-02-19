@@ -16,7 +16,7 @@ public:
     ~Game();
 
     void draw();
-    void init();
+    void init(const char* playerName);
 };
 
 

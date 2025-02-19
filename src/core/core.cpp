@@ -31,7 +31,7 @@ void Core::draw() {
             menu.draw();
             if (menu.getNext()) {
                 scene += 1;
-                game.init();
+                game.init(menu.getPlayerName());
             }
             break;
         case 1:

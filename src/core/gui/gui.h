@@ -4,9 +4,12 @@
 
 
 namespace GUI {
-    bool DrawButton(Rectangle bounds, const char* text, bool enabled);
-    bool DrawInput(Rectangle bounds, char* text, int maxLenght, bool enabled);
+
+
+    bool DrawButton(Rectangle bounds, const char* text, bool enabled, Font customFont); 
+    bool DrawInput(Rectangle bounds, char* text, int maxLenght, bool enabled, Font customFont);
 }
 
 
 #endif
+
