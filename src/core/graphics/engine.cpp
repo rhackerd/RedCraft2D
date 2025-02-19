@@ -8,7 +8,7 @@ engine::~engine() {}
 
 void engine::init() {
     info("Engine initialized");
-    SetTraceLogLevel(LOG_INFO);
+    SetTraceLogLevel(LOG_NONE);
 }
 
 void engine::deinit() {
@@ -16,6 +16,7 @@ void engine::deinit() {
 }
 
 void engine::initWindow(int width, int height, const char* title) {
+    SetTraceLogLevel(LOG_NONE);
     InitWindow(width, height, title);
 }
 

@@ -6,12 +6,17 @@ project "app"
     language "C++"
     targetdir "bin/%{cfg.buildcfg}"
     files { "src/app/**.h", "src/app/**.cpp" }
-    links { "core", "raylib", "fmt", "enet" }
-    includedirs { "src/core", "raygui/src" }
+    links { "core", "server", "raylib", "fmt", "enet", "boost" }
+    includedirs { "src/core" }
 
 
 project "core"
     kind "StaticLib"
     language "C++"
     files { "src/core/**.h", "src/core/**.cpp"}
-    includedirs { "raygui/src" }
+
+
+project "server"
+    kind "StaticLib"
+    language "C++"
+    files { "src/server/**.h", "src/server/**.cpp" }
