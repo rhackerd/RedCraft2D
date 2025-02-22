@@ -14,9 +14,9 @@ Client::~Client() {
 }
 
 void Client::init() {
-    ENetHost* client = enet_host_create(NULL, 1,2,0,0);
+    client = enet_host_create(NULL, 1, 2, 0, 0); // Use the class member client
 
-    if(!client) {
+    if (!client) {
         error("failed to create client");
         this->~Client();
         return;
@@ -35,6 +35,7 @@ void Client::init() {
 
     info("attempting to connect to the server at localhost:1234");
 
+    // Use enet_host_service to check for connection within the timeout
     if (enet_host_service(client, &event, 5000) > 0 && event.type == ENET_EVENT_TYPE_CONNECT) {
         info("connected to the server");
 
@@ -50,15 +51,34 @@ void Client::init() {
         enet_host_flush(client);
 
         delete[] packetData;
-
-    }else {
-        error("failed to connect to the server");
+    } else {
+        error("failed to connect to the server (timeout or server error)");
         enet_peer_reset(peer);
         return;
     }
-
 }
+
 
 void Client::setPlayerName(const char* playerName) {
     this->playerName = playerName;
+}
+
+void Client::loop() {
+    if (client == nullptr || peer == nullptr || peer->state == ENET_PEER_STATE_DISCONNECTED) {
+        info("client is not connected");
+        return; // The client is disconnected, exit the loop or attempt to reconnect.
+    }
+
+    if (enet_host_service(client, &event, 0) > 0) {
+        switch (event.type) {
+            case ENET_EVENT_TYPE_DISCONNECT:
+                info("disconnected from the server");
+                // Handle disconnection here, possibly attempt to reconnect.
+                break;
+            case ENET_EVENT_TYPE_RECEIVE:
+                // Handle packet reception here
+                enet_packet_destroy(event.packet);
+                break;
+        }
+    }
 }

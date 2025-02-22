@@ -29,6 +29,8 @@ public:
     void setPlayerName(const char* playerName);
 
     void init();
+
+    void loop();
 };
 
 

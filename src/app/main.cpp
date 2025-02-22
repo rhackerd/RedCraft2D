@@ -13,8 +13,12 @@ int main(int argc, char* argv[]) {
     }
 
     if (serverMode) {
-
-    }{
+        Server server;
+        server.start();
+        while (!server.shouldCloseServer()) {
+            server.loop();
+        }
+    }else{
         Core game(false);
         game.init();
         while (!game.shouldCloseWindow()) {

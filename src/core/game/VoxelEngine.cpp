@@ -38,7 +38,7 @@ void VoxelEngine::draw() {
 }
 
 VoxelEngine::VoxelEngine() 
-    : maxSpeed(250.0f), acceleration(5000.0f), offset(0.0f, 0.0f), speed({0.0f, 0.0f}), decelerationFactor(3.0f) {
+    : maxSpeed(250.0f), acceleration(100.0f), offset(0.0f, 0.0f), speed({0.0f, 0.0f}), decelerationFactor(3.0f) {
     for (int x = 0; x < 15; x++) {
         for (int y = 0; y < 15; y++) {
             this->voxels.push_back(std::make_unique<Grass>(x * BLOCK_SIZE, y * BLOCK_SIZE));

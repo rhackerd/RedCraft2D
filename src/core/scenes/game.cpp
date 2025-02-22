@@ -8,6 +8,7 @@ Game::~Game() {
 
 void Game::draw() {
     voxelengine.event();
+    client.loop();
 
 
     voxelengine.draw();
