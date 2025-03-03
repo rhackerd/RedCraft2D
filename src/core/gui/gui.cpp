@@ -9,6 +9,7 @@ bool border = true;
 Color borderColor = {50, 50, 50, border ? 255 : 0};
 float borderRadius = 0.1f;
 Color textColor = WHITE;
+int buttonFontSize = 25;
 
 
 
@@ -19,13 +20,14 @@ bool GUI::DrawButton(Rectangle bounds, const char* text, bool enabled, Font cust
     DrawRectangleRounded(bounds, borderRadius-0.05f, 0.2f, buttonColor);
     DrawRectangleRoundedLinesEx(bounds, borderRadius, 0.2f, 2.0f, borderColor);
 
-    int textWidth = MeasureText(text, 20);
-    int textHeight = 20;
+
+    int textWidth = MeasureTextEx(customFont, text, buttonFontSize, 1.0f).x;
+    int textHeight = buttonFontSize;
     int textX = bounds.x + (bounds.width - textWidth) / 2;
     int textY = bounds.y + (bounds.height - textHeight) / 2;
 
 
-    DrawTextEx(customFont, text, {(float)textX, (float)textY}, 20, 1.0f, textColor);
+    DrawTextEx(customFont, text, {(float)textX, (float)textY}, buttonFontSize, 1.0f, textColor);
 
     if (isHovered && enabled) {
         if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {

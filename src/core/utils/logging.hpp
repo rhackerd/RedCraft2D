@@ -30,4 +30,10 @@ void warning(const string& msg, bool endl = true);
 void info(const string& msg, bool endl = true);
 void debug(const string& msg, bool endl = true);
 
+std::string logS(const string& msg, bool endl = true);
+std::string errorS(const string& msg, bool endl = true);
+std::string warningS(const string& msg, bool endl = true);
+std::string infoS(const string& msg, bool endl = true);
+std::string debugS(const string& msg, bool endl = true);
+
 #endif

@@ -15,6 +15,10 @@ public:
     Game();
     ~Game();
 
+    void onPlayerMove();
+
+    void event();
+
     void draw();
     void init(const char* playerName);
 };

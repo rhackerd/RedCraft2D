@@ -1,49 +1,114 @@
 #include "VoxelEngine.h"
-#include <iostream>
 #include <algorithm> // For std::clamp
+#include <string>    // For std::to_string
+#include <cmath>
+#include "../utils/logging.hpp"
 
 void VoxelEngine::event() {
-    float deltaTime = GetFrameTime(); // Get time since last frame
-
-    // Acceleration (Movement)
-    if (IsKeyDown(KEY_W)) speed.y = std::clamp(speed.y + acceleration * deltaTime, -maxSpeed, maxSpeed);
-    if (IsKeyDown(KEY_S)) speed.y = std::clamp(speed.y - acceleration * deltaTime, -maxSpeed, maxSpeed);
-    if (IsKeyDown(KEY_A)) speed.x = std::clamp(speed.x + acceleration * deltaTime, -maxSpeed, maxSpeed);
-    if (IsKeyDown(KEY_D)) speed.x = std::clamp(speed.x - acceleration * deltaTime, -maxSpeed, maxSpeed);
-
-    // **STRONG Deceleration (Stops Quickly When No Input)**
-    float strongFriction = acceleration * decelerationFactor * deltaTime; // 3x acceleration for instant stop
-
-    if (!IsKeyDown(KEY_W) && !IsKeyDown(KEY_S)) {
-        if (std::abs(speed.y) < strongFriction) speed.y = 0.0f;  // Stop immediately if slow
-        else if (speed.y > 0) speed.y -= strongFriction;
-        else if (speed.y < 0) speed.y += strongFriction;
+    int prevX = playerPosition.first;
+    int prevY = playerPosition.second;
+    // Store old size
+    if (windowSizeBeforeResize.first == 0 || windowSizeBeforeResize.second == 0) {
+        windowSizeBeforeResize = {GetScreenWidth(), GetScreenHeight()};
+        return;
     }
 
-    if (!IsKeyDown(KEY_A) && !IsKeyDown(KEY_D)) {
-        if (std::abs(speed.x) < strongFriction) speed.x = 0.0f;  // Stop immediately if slow
-        else if (speed.x > 0) speed.x -= strongFriction;
-        else if (speed.x < 0) speed.x += strongFriction;
+    // Get the change in window size
+    float deltaWidth = GetScreenWidth() - windowSizeBeforeResize.first;
+    float deltaHeight = GetScreenHeight() - windowSizeBeforeResize.second;
+
+    // Adjust offset to keep the camera centered
+    offset.first += deltaWidth / 2.0f;
+    offset.second += deltaHeight / 2.0f;
+
+    // Update stored window size
+    windowSizeBeforeResize = {GetScreenWidth(), GetScreenHeight()};
+
+
+
+    // Update previous window size
+    windowSizeBeforeResize = {GetScreenWidth(), GetScreenHeight()};
+
+
+
+
+
+
+    float deltaTime = GetFrameTime();
+
+    // Handle movement input
+    Vector2 direction = {0.0f, 0.0f};
+    if (IsKeyDown(KEY_W)) direction.y -= 1.0f;
+    if (IsKeyDown(KEY_S)) direction.y += 1.0f;
+    if (IsKeyDown(KEY_A)) direction.x -= 1.0f;
+    if (IsKeyDown(KEY_D)) direction.x += 1.0f;
+    
+    // Normalize diagonal movement
+    if (direction.x != 0.0f || direction.y != 0.0f) {
+        float length = sqrtf(direction.x * direction.x + direction.y * direction.y);
+        direction.x /= length;
+        direction.y /= length;
     }
 
-    // Apply movement
-    offset.first += speed.x * deltaTime;
-    offset.second += speed.y * deltaTime;
+    // Apply acceleration and clamping
+    speed.x = std::clamp(speed.x + direction.x * acceleration * deltaTime, -maxSpeed, maxSpeed);
+    speed.y = std::clamp(speed.y + direction.y * acceleration * deltaTime, -maxSpeed, maxSpeed);
+
+    // Apply friction when no input is given
+    float friction = acceleration * decelerationFactor * deltaTime;
+    if (direction.x == 0) speed.x = (std::abs(speed.x) < friction) ? 0.0f : speed.x - std::copysign(friction, speed.x);
+    if (direction.y == 0) speed.y = (std::abs(speed.y) < friction) ? 0.0f : speed.y - std::copysign(friction, speed.y);
+
+    // Move camera instead of objects
+    camera.target.x += speed.x * deltaTime;
+    camera.target.y += speed.y * deltaTime;
+
+    // set player position
+    playerPosition = {camera.target.x, camera.target.y};
+
+    // detects events and passes them to this class
+    if (prevX != playerPosition.first || prevY != playerPosition.second) {
+        onPlayerMove();
+    }
 }
 
 void VoxelEngine::draw() {
+    BeginMode2D(camera);
+    
     for (const auto& voxel : voxels) {
         voxel->display(offset.first, offset.second);
     }
+
+    EndMode2D();
+
+    // Draw player in the center of the screen
+    DrawRectangle(GetScreenWidth() / 2 - 25, GetScreenHeight() / 2 - 25, 50, 50, RED);
 }
 
 VoxelEngine::VoxelEngine() 
-    : maxSpeed(250.0f), acceleration(100.0f), offset(0.0f, 0.0f), speed({0.0f, 0.0f}), decelerationFactor(3.0f) {
+    : maxSpeed(250.0f), acceleration(5000.0f), speed({0.0f, 0.0f}), decelerationFactor(3.0f), offset({0.0f, 0.0f}) {
+    camera = {0};
+    camera.target = {0.0f, 0.0f};
+    camera.offset = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
+    camera.rotation = 0.0f;
+    camera.zoom = 1.0f;
+
+    windowSizeBeforeResize = {GetScreenWidth(), GetScreenHeight()};
+    
     for (int x = 0; x < 15; x++) {
         for (int y = 0; y < 15; y++) {
-            this->voxels.push_back(std::make_unique<Grass>(x * BLOCK_SIZE, y * BLOCK_SIZE));
+            voxels.push_back(std::make_unique<Grass>(x * BLOCK_SIZE, y * BLOCK_SIZE));
         }
     }
 }
 
 VoxelEngine::~VoxelEngine() {}
+
+void VoxelEngine::onPlayerMove() {
+    this->playerMoved = true;
+}
+
+void VoxelEngine::drawOtherPlayer(std::pair<float, float> position, const char* name) {
+    DrawRectangle(position.first, position.second, 50, 50, BLUE);
+    DrawText(name, position.first, position.second - 20, 20, BLACK);
+}

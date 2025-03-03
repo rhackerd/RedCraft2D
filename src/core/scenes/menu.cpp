@@ -3,9 +3,8 @@
 #include "../gui/gui.h"
 #include "../utils/logging.hpp"
 
-Menu::Menu() : next(false) {
+Menu::Menu() : next(false), customFont() {
     strcpy(this->text, "");
-    customFont = LoadFont("bin/Debug/assets/fonts/font.ttf");
 }
 
 Menu::~Menu() {
@@ -13,6 +12,13 @@ Menu::~Menu() {
 }
 
 void Menu::draw() {
+    if (this->customFont.baseSize == 0) {
+        customFont = LoadFont("bin/Debug/assets/fonts/font.ttf");
+        SetTextureFilter(customFont.texture, TEXTURE_FILTER_TRILINEAR);
+        info("Loaded custom font");
+    }
+
+
     int spacing = 10;
     if (GUI::DrawButton({10,50,100,35}, "Start", true, customFont)) {
         info("Start button pressed");
@@ -28,7 +34,8 @@ void Menu::draw() {
 
     GUI::DrawInput({10.0f, 200.0f, 100.0f, 35.0f}, text, 21, true, customFont);
     std::string Thetext = fmt::format("Your name would be {}", text);
-    DrawTextEx(customFont, Thetext.c_str(), {10.0f, 250.0f}, 20, 1.0f, BLACK);
+    DrawTextEx(customFont, Thetext.c_str(), {10.0f, 250.0f}, 32, 1.0f, BLACK);
+    DrawTextEx(customFont, Thetext.c_str(), {10.0f, 300.0f}, 20, 1.0f, BLACK);
 
 
 }

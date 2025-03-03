@@ -15,7 +15,7 @@ int main(int argc, char* argv[]) {
     if (serverMode) {
         Server server;
         server.start();
-        while (!server.shouldCloseServer()) {
+        while (true) {
             server.loop();
         }
     }else{
