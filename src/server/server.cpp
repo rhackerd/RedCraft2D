@@ -52,7 +52,7 @@ void Server::loop() {
             switch (event.type) {
                 case ENET_EVENT_TYPE_CONNECT:
                     this->connectPlayer(UUID, event.peer);
-                    this->sendPlayersJoinEvent(getPlayerByUUID(UUID));
+                    this->sendPlayersJoinEventReverse(getPlayerByUUID(UUID));
                     break;
 
                 case ENET_EVENT_TYPE_RECEIVE:
@@ -75,6 +75,7 @@ void Server::loop() {
                     break;
 
                 case ENET_EVENT_TYPE_DISCONNECT:
+                    this->sendPlayersLeaveEvent(getPlayerByUUID(UUID));
                     this->disconnectPlayer(UUID);
                     break;
             }
@@ -125,6 +126,7 @@ void Server::disconnectPlayer(boost::uuids::uuid UUID) {
 }
 
 
+
 Player* Server::getPlayerByUUID(boost::uuids::uuid UUID) {
     for (int i = 0; i < players.size(); i++) {
         if (players[i].getUUID() == UUID) {
@@ -146,6 +148,14 @@ void Server::identifyPlayer(boost::uuids::uuid UUID, std::string name) {
 
     sendPlayersJoinEvent(player);
 }
+void Server::sendPlayersJoinEventReverse(Player *player) {
+    UUIDT UUID = player->getUUID();
+    for (auto p : players) {
+        if (!(p == *player)) {
+            sendPlayerJoin(p, *player);
+        }
+    }
+}
 
 void Server::sendPlayersJoinEvent(Player *player) {
     UUIDT UUID = player->getUUID();
@@ -154,6 +164,34 @@ void Server::sendPlayersJoinEvent(Player *player) {
             sendPlayerJoin(*player, p);
         }
     }
+}
+
+void Server::sendPlayersLeaveEvent(Player *player) {
+    for (auto p : players) {
+        if (!(p == *player)) {
+            info("Sending leave event to " + p.getName());
+            sendPlayerLeave(*player, p);
+        }
+    }
+}
+
+void Server::sendPlayerLeave(Player player, Player toWho) {
+    std::string playerName = player.getName();
+    info("Sending leave event to " + toWho.getName() + " for player " + playerName);
+    size_t packetSize = 1 + sizeof(uint16_t) + playerName.size();
+    uint8_t* data = new uint8_t[packetSize];
+
+    data[0] = eventLeave;  // Leave event (003)
+
+    size_t offset = 1;
+    uint16_t nameSize = playerName.size();
+    std::memcpy(data + offset, &nameSize, sizeof(uint16_t));
+    offset += sizeof(uint16_t);
+
+    std::memcpy(data + offset, playerName.c_str(), playerName.size());
+
+    ENetPacket* packet = enet_packet_create(data, packetSize, ENET_PACKET_FLAG_RELIABLE);
+    enet_peer_send(toWho.getPeer(), 0, packet);
 }
 
 int Server::generateUniqueID(boost::uuids::uuid UUID) {

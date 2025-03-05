@@ -74,7 +74,8 @@ public:
     void sendPlayerJoin(Player player, Player toWho);               // send the player join event to all other players
     void sendPlayerLeave(Player player, Player toWho);              // send the player leave event to all other players
     
-    void sendPlayersJoinEvent(Player *player);                      // send the player who joined the list of all players joined
+    void sendPlayersJoinEvent(Player *player);        // send the player who joined the list of all players joined
+    void sendPlayersJoinEventReverse(Player *player);               // send the player who joined the list of all players joined
     void sendPlayersLeaveEvent(Player *player);                     // send the player who left the list of all players joined
 
     uint8_t getEventId(const std::string& packet);

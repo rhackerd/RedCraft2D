@@ -12,6 +12,9 @@ Client::Client() : client(nullptr), address(), peer(nullptr), event(), packet(nu
 }
 
 Client::~Client() {
+    enet_peer_disconnect(peer, 0);
+    enet_host_flush(client);
+    enet_host_destroy(client);
     enet_deinitialize();
 }
 
@@ -84,6 +87,17 @@ void Client::loop() {
                     }
                 }else if(eventId==eventJoin) {
                     this->getPlayerInfos(reinterpret_cast<uint8_t*>(event.packet->data), event.packet->dataLength);
+                }else if(eventId==eventLeave) {
+                    // Handle player leaving
+                    // 3, playername
+                    std::string playerName(reinterpret_cast<char*>(event.packet->data + 1));
+                    info("Player left: " + playerName);
+                    for (auto it = players.begin(); it != players.end(); ++it) {
+                        if (it->first == playerName) {
+                            players.erase(it);
+                            break;
+                        }
+                    }
                 }
                 else {
                     info("received unknown event: " + std::to_string(eventId));

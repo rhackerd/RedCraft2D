@@ -4,6 +4,7 @@
 #define eventIdentify   0
 #define eventMove       1
 #define eventJoin       2  //2, playername, x, y
+#define eventLeave      3  //3, playername
 
 
 #endif
