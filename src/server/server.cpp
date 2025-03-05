@@ -2,6 +2,8 @@
 #include <thread>
 #include "events.hpp"
 
+#define UUIDT boost::uuids::uuid
+
 Server::Server()
 {
     if (enet_initialize() != 0) {
@@ -50,6 +52,7 @@ void Server::loop() {
             switch (event.type) {
                 case ENET_EVENT_TYPE_CONNECT:
                     this->connectPlayer(UUID, event.peer);
+                    this->sendPlayersJoinEvent(getPlayerByUUID(UUID));
                     break;
 
                 case ENET_EVENT_TYPE_RECEIVE:
@@ -141,9 +144,14 @@ void Server::identifyPlayer(boost::uuids::uuid UUID, std::string name) {
     player->setName(name);
     info("Player identified with name: " + name);
 
+    sendPlayersJoinEvent(player);
+}
+
+void Server::sendPlayersJoinEvent(Player *player) {
+    UUIDT UUID = player->getUUID();
     for (auto p : players) {
-        if (p.getUUID() != UUID) {
-            sendPlayerJoin(p, *player);
+        if (!(p == *player)) {
+            sendPlayerJoin(*player, p);
         }
     }
 }
@@ -164,7 +172,7 @@ void Server::updatePlayersPosition(Player player, float x, float y) {
 
     for (int i = 0; i < players.size(); i++) {
         if (players[i].getUUID() != player.getUUID()) {
-            sendPlayersPositon(players[i], x, y);
+            sendPlayersPositon(players[i], player, x,y);
         }
     }
 }
@@ -178,10 +186,10 @@ Player* Server::getPlayerByPeer(ENetPeer* peer) {
     return nullptr;
 }
 
-void Server::sendPlayersPositon(Player player, float x, float y) {
+void Server::sendPlayersPositon(Player player,Player playerToSend, float x, float y) {
     if (player.getPeer() != nullptr) {
         // Get the player's name
-        std::string playerName = player.getName();
+        std::string playerName = playerToSend.getName();
 
         // Calculate the size of the packet (1 byte for event type + size of name + size of position)
         size_t packetSize = 1 + sizeof(uint16_t) + playerName.size() + sizeof(x) + sizeof(y);

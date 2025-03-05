@@ -45,7 +45,7 @@ public:
     uint8_t getEventId(const std::string& packet);
 
     std::vector<std::pair<std::string, std::pair<float, float>>> getPlayers() { return players; };
-
+    const char* getPlayersName() {return playerName;};
     void init();
 
     void loop();

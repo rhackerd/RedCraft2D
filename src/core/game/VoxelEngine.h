@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 class VoxelEngine
 {
@@ -25,6 +26,8 @@ private:
 
     // networking variables
     bool playerMoved = false;
+
+    std::string playerName;
 public:
     VoxelEngine();
     ~VoxelEngine();
@@ -37,6 +40,9 @@ public:
     void setPlayerMoved(bool moved) { playerMoved = moved; }
     bool getPlayerMoved() { return playerMoved; }
     void drawOtherPlayer(std::pair<float, float> position, const char* name);
+
+    void setPlayerName(const char* name) { playerName = name; }
+    std::string getPlayerName() { return playerName; }
 
     void draw();
     void event();

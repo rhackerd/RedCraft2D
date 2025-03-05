@@ -78,11 +78,11 @@ void Client::loop() {
                     for (auto& player : players) {
                         if (player.first == playerName) {
                             player.second = position;
+                    
                             break;
                         }
                     }
                 }else if(eventId==eventJoin) {
-                    info("received join event");
                     this->getPlayerInfos(reinterpret_cast<uint8_t*>(event.packet->data), event.packet->dataLength);
                 }
                 else {
@@ -197,7 +197,7 @@ void Client::getPlayerInfos(const uint8_t* packet, size_t packetLength) {
     players.push_back(std::make_pair(playerName, std::make_pair(x, y)));
 
     // Print received player data
-    info("New player joined: " + playerName + " at (" + std::to_string(x) + ", " + std::to_string(y) + ")");
+    info("Player joined: " + playerName + " at (" + std::to_string(x) + ", " + std::to_string(y) + ")");
 }
 
 

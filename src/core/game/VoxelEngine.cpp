@@ -64,9 +64,9 @@ void VoxelEngine::event() {
     camera.target.y += speed.y * deltaTime;
 
     // set player position
-    playerPosition = {camera.target.x, camera.target.y};
+    playerPosition = {static_cast<int>(std::round(camera.target.x)), static_cast<int>(std::round(camera.target.y))};
 
-    // detects events and passes them to this class
+    // Detects events and passes them to this class
     if (prevX != playerPosition.first || prevY != playerPosition.second) {
         onPlayerMove();
     }
@@ -82,6 +82,8 @@ void VoxelEngine::draw() {
     EndMode2D();
 
     // Draw player in the center of the screen
+    // draw name
+    DrawText(playerName.c_str(), GetScreenWidth() / 2 - 25, GetScreenHeight() / 2 - 50, 20, BLACK);
     DrawRectangle(GetScreenWidth() / 2 - 25, GetScreenHeight() / 2 - 25, 50, 50, RED);
 }
 
@@ -109,6 +111,10 @@ void VoxelEngine::onPlayerMove() {
 }
 
 void VoxelEngine::drawOtherPlayer(std::pair<float, float> position, const char* name) {
-    DrawRectangle(position.first, position.second, 50, 50, BLUE);
-    DrawText(name, position.first, position.second - 20, 20, BLACK);
+    if (name == playerName || name == "") return;
+    float adjustedX = (position.first - camera.target.x + camera.offset.x) + 375; 
+    float adjustedY = (position.second - camera.target.y + camera.offset.y) + 275 ;
+
+    DrawRectangle(adjustedX, adjustedY, 50, 50, BLUE);
+    DrawText(name, adjustedX, adjustedY - 20, 20, BLACK);
 }

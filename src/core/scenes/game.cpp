@@ -1,6 +1,8 @@
 #include "game.h"
+#include "../utils/logging.hpp"
 
-Game::Game() {}
+Game::Game() {
+}
 
 Game::~Game() {
 
@@ -29,6 +31,7 @@ void Game::draw() {
 void Game::init(const char* playerName) {
     client.setPlayerName(playerName);
     client.init();
+    voxelengine.setPlayerName(client.getPlayersName());
 }
 
 void Game::onPlayerMove() {
