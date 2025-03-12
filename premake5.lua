@@ -12,6 +12,13 @@ workspace "redcraft2D"
         description = "Build server module"
     }
 
+    filter "configurations:Debug"
+        symbols "On"
+        optimize "Off"
+        buildoptions { "-g" }
+
+
+
 project "app"
     kind "ConsoleApp"
     language "C++"

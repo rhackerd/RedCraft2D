@@ -85,6 +85,7 @@
         "strstream": "cpp",
         "regex": "cpp",
         "source_location": "cpp",
-        "ranges": "cpp"
+        "ranges": "cpp",
+        "csetjmp": "cpp"
     }
 }
