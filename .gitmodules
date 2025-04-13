@@ -1,6 +1,0 @@
-[submodule "raygui"]
-	path = raygui
-	url = https://github.com/raysan5/raygui
-[submodule "json"]
-	path = json
-	url = https://github.com/nlohmann/json
