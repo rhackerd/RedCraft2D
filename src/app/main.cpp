@@ -1,6 +1,5 @@
 #include <fmt/core.h>
 #include "core.h"
-#include "../../src/server/server.h"
 #include "args.h"
 
 int main(int argc, char* argv[]) {
@@ -16,11 +15,7 @@ int main(int argc, char* argv[]) {
 
 
     if (serverMode) {
-        Server server(port, ENET_HOST_ANY, maxClients);
-        server.start();
-        while (true) {
-            server.loop();
-        }
+        fmt::print("Server is removed for testing purposes\n");
     }else{
         Core game(false);
         game.init();

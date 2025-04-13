@@ -2,13 +2,15 @@
 #define SAVING_H
 
 #include <string>
-#include "nlohmann/json.hpp"
 #include <filesystem>
 #include <fstream>
 #include "../utils/logging.hpp"
 
-namespace fs = std::filesystem;
+#include <nlohmann/json.hpp>
+
 using json = nlohmann::json;
+
+//TODO: Rewrite this entire thing
 
 class Saving
 {

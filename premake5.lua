@@ -17,14 +17,17 @@ workspace "redcraft2D"
         optimize "Off"
         buildoptions { "-g" }
 
+    location "build"
+
 
 
 project "app"
     kind "ConsoleApp"
     language "C++"
-    targetdir "bin/%{cfg.buildcfg}"
+    targetdir "build/bin/%{cfg.buildcfg}"
+    objdir "build/obj/%{cfg.buildcfg}"
     files { "src/app/**.h", "src/app/**.cpp" }
-    links { "core", "server", "raylib", "fmt", "enet", "boost_system", "pthread"}
+    links { "core", "raylib", "fmt"}
     includedirs { "src/core" , "json/single_include" }
 
     if _OPTIONS["buildCore"] then
@@ -38,18 +41,10 @@ project "core"
     kind "StaticLib"
     language "C++"
     files { "src/core/**.h", "src/core/**.cpp" }
+    targetdir "build/bin/%{cfg.buildcfg}"
+    objdir "build/obj/%{cfg.buildcfg}"
 
 
     if _OPTIONS["buildCore"] then
         defines { "BUILD_CORE" }
-    end
-
-project "server"
-    kind "StaticLib"
-    language "C++"
-    files { "src/server/**.h", "src/server/**.cpp" }
-
-
-    if _OPTIONS["buildServer"] then
-        defines { "BUILD_SERVER" }
     end

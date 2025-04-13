@@ -4,6 +4,9 @@
 #include <fmt/core.h>
 #include <raylib.h>
 
+// NOTE: Half-Wrote properly
+// TODO: Just change some function names
+
 class engine
 {
 private:

@@ -3,6 +3,9 @@
 #include "../gui/gui.h"
 #include "../utils/logging.hpp"
 
+// NOTE: does the job so i dont core for the time being
+// TODO: Rewrite later
+
 Menu::Menu() : next(false), customFont() {
     strcpy(this->text, "");
 }

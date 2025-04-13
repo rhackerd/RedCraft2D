@@ -1,6 +1,7 @@
 #include "saving.h"
 
 using json = nlohmann::json;
+namespace fs = std::filesystem;
 
 Saving::Saving(std::string path)
 {

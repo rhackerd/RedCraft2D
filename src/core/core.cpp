@@ -3,6 +3,8 @@
 
 Core::Core(bool serverMode) : debug_voxels(false), debug_chunks(false), show_fps(false), show_player_pos(false), show_player_rot(false), show_player_chunk(false), show_player_voxel(false), scene(0), serverMode(serverMode) {}
 
+// NOTE: Half-Wrote properly
+// TODO: Rewrite later
 
 Core::~Core() {
     info("Shutting down Core");

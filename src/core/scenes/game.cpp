@@ -1,6 +1,9 @@
 #include "game.h"
 #include "../utils/logging.hpp"
 
+// NOTE: Half-Wrote properly
+// TODO: Rewrite
+
 Game::Game() {
 }
 
@@ -19,21 +22,14 @@ void Game::draw() {
     this->event();
 
     voxelengine.event();
-    client.loop();
 
 
     voxelengine.draw();
-    for (auto& player : client.getPlayers()) {
-        voxelengine.drawOtherPlayer(player.second, player.first.c_str());
-    }
 }
 
 void Game::init(const char* playerName) {
-    client.setPlayerName(playerName);
-    client.init();
-    voxelengine.setPlayerName(client.getPlayersName());
+    voxelengine.setPlayerName(playerName);
 }
 
 void Game::onPlayerMove() {
-    client.sendPlayerPosition(voxelengine.getPlayerPosition());
 }

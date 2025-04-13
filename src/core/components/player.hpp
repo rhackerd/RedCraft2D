@@ -3,6 +3,8 @@
 
 #include <string>
 
+// NOTE: Wrote properly
+
 class Player
 {
 private:

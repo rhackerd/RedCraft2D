@@ -8,6 +8,8 @@
 #include <memory>
 #include <string>
 
+//TODO : Rewrite
+
 class VoxelEngine
 {
 private:
