@@ -3,12 +3,15 @@
 #include <string>    // For std::to_string
 #include <cmath>
 #include "../utils/logging.hpp"
+#include <fmt/core.h>
 
 //NOTE: Not Wrote Properly
 // TODO: Rewrite
 
 
-// to be honest i dont know what this does
+#define renderRadius 500
+
+// to be honest i dont know what this does 
 void VoxelEngine::event() {
     int prevX = playerPosition.first;
     int prevY = playerPosition.second;
@@ -22,6 +25,7 @@ void VoxelEngine::event() {
     offset.second += deltaHeight / 2.0f;
     windowSizeBeforeResize = {GetScreenWidth(), GetScreenHeight()};
     windowSizeBeforeResize = {GetScreenWidth(), GetScreenHeight()};
+    fmt::print("offset: {} {}\n", offset.first, offset.second);
 
 
     float deltaTime = GetFrameTime();
@@ -48,14 +52,23 @@ void VoxelEngine::event() {
     if (prevX != playerPosition.first || prevY != playerPosition.second) {
         onPlayerMove();
     }
+
+    float centerX = camera.target.x + offset.first;
+    float centerY = camera.target.y + offset.second;
+    o_terrain.update(centerX, centerY, renderRadius);
 }
 
 void VoxelEngine::draw() {
     BeginMode2D(camera);
     
-    for (const auto& voxel : voxels) {
-        voxel->display(offset.first, offset.second);
-    }
+
+    // draw terrain
+    // i was fixing this for like 2h and then i noticed i wasn't compiling the project lol
+    int centerX = (GetScreenWidth()/ 2) - offset.first;
+    int centerY = (GetScreenHeight()) / 2 - offset.second;
+
+    o_terrain.draw(centerX, centerY);
+
 
     EndMode2D();
 
@@ -66,7 +79,7 @@ void VoxelEngine::draw() {
 }
 
 VoxelEngine::VoxelEngine() 
-    : maxSpeed(250.0f), acceleration(5000.0f), speed({0.0f, 0.0f}), decelerationFactor(3.0f), offset({0.0f, 0.0f}) {
+    : maxSpeed(250.0f), acceleration(5000.0f), speed({0.0f, 0.0f}), decelerationFactor(3.0f), offset({0.0f, 0.0f}), o_terrain() {
     camera = {0};
     camera.target = {0.0f, 0.0f};
     camera.offset = {(float)GetScreenWidth() / 2, (float)GetScreenHeight() / 2};
@@ -77,7 +90,7 @@ VoxelEngine::VoxelEngine()
     
     for (int x = 0; x < 15; x++) {
         for (int y = 0; y < 15; y++) {
-            voxels.push_back(std::make_unique<Grass>(x * BLOCK_SIZE, y * BLOCK_SIZE));
+            o_terrain.addVoxel(std::make_unique<Grass>(x * BLOCK_SIZE, y * BLOCK_SIZE));
         }
     }
 }

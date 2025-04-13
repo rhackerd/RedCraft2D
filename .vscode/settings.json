@@ -86,6 +86,7 @@
         "regex": "cpp",
         "source_location": "cpp",
         "ranges": "cpp",
-        "csetjmp": "cpp"
+        "csetjmp": "cpp",
+        "expected": "cpp"
     }
 }

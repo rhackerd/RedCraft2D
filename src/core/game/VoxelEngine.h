@@ -2,7 +2,8 @@
 #define VOXELENGINE_H
 #include "../blocks/blocks.h"
 #include "../definitions.h"
-
+#include "terrain/terrain.h"
+#include "normal/normal.h"
 
 #include <vector>
 #include <memory>
@@ -13,7 +14,10 @@
 class VoxelEngine
 {
 private:
-    std::vector<std::unique_ptr<Voxel>> voxels;
+    // objects
+    Terrain o_terrain;
+    Normal o_normal;
+
     std::pair<float, float> offset;
     std::pair<float, float> playerPosition;
     std::pair<float, float> windowSizeBeforeResize;
@@ -37,15 +41,24 @@ public:
     void updateOffset();
     void onPlayerMove();
 
-    std::pair<float, float> getPlayerPosition() { return playerPosition; }
     void setPlayerPosition(std::pair<float, float> position) { playerPosition = position; }
     void setPlayerMoved(bool moved) { playerMoved = moved; }
-    bool getPlayerMoved() { return playerMoved; }
-    void drawOtherPlayer(std::pair<float, float> position, const char* name);
-
     void setPlayerName(const char* name) { playerName = name; }
-    std::string getPlayerName() { return playerName; }
+    void setAcceleration(float acceleration) { this->acceleration = acceleration; }
+    void setDecelerationFactor(float decelerationFactor) { this->decelerationFactor = decelerationFactor; }
+    void setMaxSpeed(float maxSpeed) { this->maxSpeed = maxSpeed; }
 
+
+
+    std::pair<float, float> getPlayerPosition() { return playerPosition; }
+    bool getPlayerMoved() { return playerMoved; }
+    std::string getPlayerName() { return playerName; }
+    float getAcceleration() { return acceleration; }
+    float getDecelerationFactor() { return decelerationFactor; }
+    float getMaxSpeed() { return maxSpeed; }
+
+
+    void drawOtherPlayer(std::pair<float, float> position, const char* name);
     void draw();
     void event();
 };
