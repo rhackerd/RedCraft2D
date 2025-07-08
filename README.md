@@ -1,9 +1,10 @@
 # RedCraft2D
 
 **RedCraft2D** is a 2D voxel game featuring real physics, including temperature simulation, waste gases from heat sources like furnaces, and more. It offers a realistic environment where players must manage their survival in changing conditions.
+It is a **mod** for RedCraft.
 
 ## Note
-RedCraft2D is still in **heavy development**!!
+RedCraft2D development is paused until RedCraft will be completed or in a workable state.
 
 ## TODO
 
