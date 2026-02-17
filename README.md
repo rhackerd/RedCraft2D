@@ -4,7 +4,7 @@
 It is a **mod** for RedCraft.
 
 ## Note
-RedCraft2D development is paused until RedCraft will be completed or in a workable state.
+RedCraft2D development is paused until RedCraft will be completed or in a workable state. (RedCraft Engine was deprecated thus i will be probably using Nova Engine)
 
 ## TODO
 
@@ -46,3 +46,4 @@ Once compiled, you can run the game from the terminal:
 ## Authors
 
 - [rhackerd](https://github.com/rhackerd)
+
